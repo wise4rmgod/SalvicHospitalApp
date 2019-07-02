@@ -62,6 +62,7 @@ public class Main2Activity extends AppCompatActivity
     int minteger = 0;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,42 +71,38 @@ public class Main2Activity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         TAG = "TAG";
-        FloatingActionButton fab = findViewById(R.id.addbtn);
+        final FloatingActionButton fab = findViewById(R.id.addbtn);
         spinner = findViewById(R.id.spinner);
         age = findViewById(R.id.age);
         email = findViewById(R.id.email);
         fullname = findViewById(R.id.fullname);
         recyclerView = findViewById(R.id.patientrecyclerview);
 
-         pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
-         editor = pref.edit();
+        pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+        editor = pref.edit();
 
 
-        String cout= (String) pref.getString("count","get");
-        String username= (String) pref.getString("username","get");
-        Toast.makeText(Main2Activity.this, "Welcome"+" "+username, Toast.LENGTH_SHORT).show();
-       // Toast.makeText(Main2Activity.this, cout, Toast.LENGTH_SHORT).show();
-
-     final int realcount = Integer.parseInt(cout);
-        Toast.makeText(Main2Activity.this, realcount+"", Toast.LENGTH_SHORT).show();
+        String cout = (String) pref.getString("count", "0");
+        String username = (String) pref.getString("username", "get");
+        Toast.makeText(Main2Activity.this, "Welcome" + " " + username, Toast.LENGTH_SHORT).show();
+        Toast.makeText(Main2Activity.this, cout, Toast.LENGTH_SHORT).show();
+        final int realcount = Integer.parseInt(cout);
+        //  Toast.makeText(Main2Activity.this, realcount+"", Toast.LENGTH_SHORT).show();
         String sexarray[] = getResources().getStringArray(R.array.sex_arrays);
-        if (pref.getInt("mainactivitycount", 1) == realcount){
-            fab.setEnabled(false);
-            Toast.makeText(Main2Activity.this, "Button Disabled", Toast.LENGTH_SHORT).show();
-        }
-    fab.setOnClickListener(new View.OnClickListener() {
+
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 minteger = minteger + 1;
-                editor.putInt("mainactivitycount",minteger);
+                editor.putInt("mainactivitycount", minteger);
                 editor.apply();
 
-                if (pref.getInt("mainactivitycount", 1) == realcount){
+                if (pref.getInt("mainactivitycount", 1) == realcount) {
+                    fab.setEnabled(false);
                     Toast.makeText(Main2Activity.this, "You Have reached the maximum number of patients", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    //savepatientdetails();
-                    Toast.makeText(Main2Activity.this, "Added"+minteger, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Main2Activity.this, "Button Disabled", Toast.LENGTH_SHORT).show();
+                } else {
+                    savepatientdetails();
 
                 }
 
@@ -212,12 +209,14 @@ public class Main2Activity extends AppCompatActivity
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                        Toast.makeText(getApplicationContext(), "successfully deleted!", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w(TAG, "Error deleting document", e);
+                        Toast.makeText(getApplicationContext(), "Error deleting document", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -275,29 +274,5 @@ public class Main2Activity extends AppCompatActivity
         }
     }
 
-    public void checkpatientscounts(){
-        db.collection("patientsallowed")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                            }
-                        } else {
-                            Log.w(TAG, "Error getting documents.", task.getException());
-                        }
-                    }
-                });
-    }
-
-    @Override
-    protected void onStop() {
-        editor.clear();
-        editor.commit();
-        super.onStop();
-    }
 
 }

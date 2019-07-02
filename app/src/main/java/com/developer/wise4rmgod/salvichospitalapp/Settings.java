@@ -13,8 +13,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Settings extends AppCompatActivity {
 
-    EditText username,patientsallowed,numberofpatients;
-    Button save;
+    EditText username, patientsallowed, numberofpatients;
+    Button save, clearbtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,24 +22,32 @@ public class Settings extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
         final TextView test = findViewById(R.id.test);
         username = findViewById(R.id.username);
-        patientsallowed  = findViewById(R.id.numberofpatientsallowed);
-        numberofpatients  = findViewById(R.id.numberofpatients);
-        save  = findViewById(R.id.savebtn);
+        patientsallowed = findViewById(R.id.numberofpatientsallowed);
+        numberofpatients = findViewById(R.id.numberofpatients);
+        save = findViewById(R.id.savebtn);
+        clearbtn = findViewById(R.id.clearebtn);
         final SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
         final SharedPreferences.Editor editor = pref.edit();
 
-       // Toast.makeText(this, pref.getInt("count", 1) +"", Toast.LENGTH_SHORT).show();
-      //  int num1 = 0;
+        // Toast.makeText(this, pref.getInt("count", 1) +"", Toast.LENGTH_SHORT).show();
+        //  int num1 = 0;
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              //  minteger = minteger + 1;
-               // test.setText(minteger+"");
+                //  minteger = minteger + 1;
+                // test.setText(minteger+"");
                 editor.putString("count", patientsallowed.getText().toString());
-                editor.putString("username",username.getText().toString());
+                editor.putString("username", username.getText().toString());
                 editor.apply();
-                Toast.makeText(getApplicationContext(), "Max:"+ pref.getString("count","get"), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Max:" + pref.getString("count", "get"), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        clearbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editor.clear();
             }
         });
 
