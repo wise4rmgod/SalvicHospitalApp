@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.support.v4.view.GravityCompat;
@@ -33,7 +34,8 @@ public class Main2Activity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     Spinner spinner;
-    EditText age,fullname,email;
+    EditText age, fullname, email;
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,14 +49,18 @@ public class Main2Activity extends AppCompatActivity
         age = findViewById(R.id.age);
         email = findViewById(R.id.email);
         fullname = findViewById(R.id.fullname);
+        recyclerView = findViewById(R.id.patientrecyclerview);
 
         String sexarray[] = getResources().getStringArray(R.array.sex_arrays);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              savepatientdetails();
+                savepatientdetails();
             }
         });
+        // The code below will retrieve the patients details
+        retrievepatientdetails();
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -79,27 +85,6 @@ public class Main2Activity extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main2, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -108,10 +93,10 @@ public class Main2Activity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
+
+        } else if (id == R.id.nav_tools) {
             Intent feeds = new Intent(getApplicationContext(), Settings.class);
             startActivity(feeds);
-        } else if (id == R.id.nav_tools) {
-
         } else if (id == R.id.nav_share) {
             Intent share = new Intent(android.content.Intent.ACTION_SEND);
             share.setType("text/plain");
@@ -133,8 +118,8 @@ public class Main2Activity extends AppCompatActivity
     public void savepatientdetails() {
         Map<String, String> user = new HashMap<>();
         user.put("fullname", fullname.getText().toString());
-        user.put("age",age.getText().toString());
-        user.put("email",email.getText().toString());
+        user.put("age", age.getText().toString());
+        user.put("email", email.getText().toString());
         user.put("sex", spinner.getSelectedItem().toString());
 
 // Add a new document with a generated ID
@@ -154,5 +139,9 @@ public class Main2Activity extends AppCompatActivity
                         Toast.makeText(Main2Activity.this, " Not Successful", Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    public void retrievepatientdetails() {
+
     }
 }
