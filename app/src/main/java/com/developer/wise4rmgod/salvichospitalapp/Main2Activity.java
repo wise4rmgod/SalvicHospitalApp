@@ -2,6 +2,7 @@ package com.developer.wise4rmgod.salvichospitalapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -25,12 +26,15 @@ import android.view.Menu;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.developer.wise4rmgod.salvichospitalapp.adapter.PatientAdapter;
 import com.developer.wise4rmgod.salvichospitalapp.model.PatientClass;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -55,7 +59,9 @@ public class Main2Activity extends AppCompatActivity
     PatientAdapter patientAdapter;
     String TAG;
     private List<PatientClass> mUserList = new ArrayList<>();
-
+    int minteger = 0;
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,13 +77,42 @@ public class Main2Activity extends AppCompatActivity
         fullname = findViewById(R.id.fullname);
         recyclerView = findViewById(R.id.patientrecyclerview);
 
+         pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+         editor = pref.edit();
+
+
+        String cout= (String) pref.getString("count","get");
+        String username= (String) pref.getString("username","get");
+        Toast.makeText(Main2Activity.this, "Welcome"+" "+username, Toast.LENGTH_SHORT).show();
+       // Toast.makeText(Main2Activity.this, cout, Toast.LENGTH_SHORT).show();
+
+     final int realcount = Integer.parseInt(cout);
+        Toast.makeText(Main2Activity.this, realcount+"", Toast.LENGTH_SHORT).show();
         String sexarray[] = getResources().getStringArray(R.array.sex_arrays);
-        fab.setOnClickListener(new View.OnClickListener() {
+        if (pref.getInt("mainactivitycount", 1) == realcount){
+            fab.setEnabled(false);
+            Toast.makeText(Main2Activity.this, "Button Disabled", Toast.LENGTH_SHORT).show();
+        }
+    fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                savepatientdetails();
+                minteger = minteger + 1;
+                editor.putInt("mainactivitycount",minteger);
+                editor.apply();
+
+                if (pref.getInt("mainactivitycount", 1) == realcount){
+                    Toast.makeText(Main2Activity.this, "You Have reached the maximum number of patients", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    //savepatientdetails();
+                    Toast.makeText(Main2Activity.this, "Added"+minteger, Toast.LENGTH_SHORT).show();
+
+                }
+
+
             }
         });
+
         // Check internet connection
         checkinternet();
         // The code below will retrieve the patients details
@@ -94,7 +129,6 @@ public class Main2Activity extends AppCompatActivity
         ArrayAdapter sex = new ArrayAdapter(this, android.R.layout.simple_spinner_item, sexarray);
         sex.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(sex);
-
 
     }
 
@@ -240,4 +274,30 @@ public class Main2Activity extends AppCompatActivity
             Toast.makeText(getApplicationContext(), getString(R.string.nonetwork), Toast.LENGTH_SHORT).show();
         }
     }
+
+    public void checkpatientscounts(){
+        db.collection("patientsallowed")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                            }
+                        } else {
+                            Log.w(TAG, "Error getting documents.", task.getException());
+                        }
+                    }
+                });
+    }
+
+    @Override
+    protected void onStop() {
+        editor.clear();
+        editor.commit();
+        super.onStop();
+    }
+
 }
