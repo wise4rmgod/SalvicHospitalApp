@@ -19,14 +19,14 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.MyViewHo
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView fullname, message, date,count_comment,count_likes;
+        public TextView fullname, age, gender;
 
         public MyViewHolder(View view) {
             super(view);
             //initialize buttons and TextViews
-          //  message =  view.findViewById(R.id.listdesignergallerycommentmessage);
-           // fullname =  view.findViewById(R.id.listdesignergalleryfullname);
-            //date =  view.findViewById(R.id.listpostfeeddate);
+          age =  view.findViewById(R.id.listage);
+          fullname =  view.findViewById(R.id.listfullname);
+           gender =  view.findViewById(R.id.listgender);
 
         }
     }
@@ -47,11 +47,11 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.MyViewHo
     @Override
     public void onBindViewHolder(final PatientAdapter.MyViewHolder holder, final int position) {
 
-        final PatientClass commentsClass = commentsClassadapter.get(position);
+        final PatientClass patient = commentsClassadapter.get(position);
 //        holder.date.setText(commentsClass.getDate());
-     //   holder.fullname.setText(commentsClass.getFullname());
-      //  holder.message.setText(commentsClass.getMessage());
-        //  holder.city.setText(postfeedsClassadapter.size()+"");
+          holder.fullname.setText(patient.getFullname());
+          holder.age.setText(patient.getAge());
+          holder.gender.setText(patient.getSex());
 
     }
 

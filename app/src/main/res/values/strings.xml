@@ -14,6 +14,8 @@
     <string name="menu_tools">Tools</string>
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
+    <string name="menu_clear">Clear Patient Details</string>
+    <string name="nonetwork">No internet connection</string>
     <string-array name="sex_arrays">
         <item>Sex</item>
         <item>Male</item>

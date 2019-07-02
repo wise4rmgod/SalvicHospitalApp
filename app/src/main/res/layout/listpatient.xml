@@ -21,6 +21,7 @@
             android:layout_height="wrap_content"
             android:text="Full-Name:"/>
         <TextView
+            android:id="@+id/listfullname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Nwokocha Wisdom Maduabuchi"/>
@@ -34,6 +35,7 @@
                 android:layout_height="wrap_content"
                 android:text="Gender:"/>
             <TextView
+                android:id="@+id/listgender"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Male"/>
@@ -47,6 +49,7 @@
                 android:layout_height="wrap_content"
                 android:text="Age:"/>
             <TextView
+                android:id="@+id/listage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="24"/>

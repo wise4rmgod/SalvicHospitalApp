@@ -1,27 +1,27 @@
 package com.developer.wise4rmgod.salvichospitalapp.model;
 
 public class PatientClass {
-    String id;
+    String sex;
     String fullname;
     String age;
-    String gender;
+    String email;
 
     public PatientClass() {
     }
 
-    public PatientClass(String id, String fullname, String age, String gender) {
-        this.id = id;
+    public PatientClass(String sex, String fullname, String age, String email) {
+        this.sex = sex;
         this.fullname = fullname;
         this.age = age;
-        this.gender = gender;
+        this.email = email;
     }
 
-    public String getId() {
-        return id;
+    public String getSex() {
+        return sex;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setSex(String sex) {
+        this.sex = sex;
     }
 
     public String getFullname() {
@@ -40,11 +40,11 @@ public class PatientClass {
         this.age = age;
     }
 
-    public String getGender() {
-        return gender;
+    public String getEmail() {
+        return email;
     }
 
-    public void setGender(String gender) {
-        this.gender = gender;
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

@@ -1,10 +1,15 @@
 package com.developer.wise4rmgod.salvichospitalapp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -22,13 +27,24 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.developer.wise4rmgod.salvichospitalapp.adapter.PatientAdapter;
+import com.developer.wise4rmgod.salvichospitalapp.model.PatientClass;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import javax.annotation.Nullable;
 
 public class Main2Activity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -36,6 +52,9 @@ public class Main2Activity extends AppCompatActivity
     Spinner spinner;
     EditText age, fullname, email;
     RecyclerView recyclerView;
+    PatientAdapter patientAdapter;
+    String TAG;
+    private List<PatientClass> mUserList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +63,7 @@ public class Main2Activity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        TAG = "TAG";
         FloatingActionButton fab = findViewById(R.id.addbtn);
         spinner = findViewById(R.id.spinner);
         age = findViewById(R.id.age);
@@ -58,8 +78,11 @@ public class Main2Activity extends AppCompatActivity
                 savepatientdetails();
             }
         });
+        // Check internet connection
+        checkinternet();
         // The code below will retrieve the patients details
         retrievepatientdetails();
+
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -97,22 +120,28 @@ public class Main2Activity extends AppCompatActivity
         } else if (id == R.id.nav_tools) {
             Intent feeds = new Intent(getApplicationContext(), Settings.class);
             startActivity(feeds);
+        } else if (id == R.id.nav_clear) {
+            clearpatientsdetails();
         } else if (id == R.id.nav_share) {
-            Intent share = new Intent(android.content.Intent.ACTION_SEND);
-            share.setType("text/plain");
-            share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-
-            // Add data to the intent, the receiving app will decide
-            // what to do with it.
-            share.putExtra(Intent.EXTRA_SUBJECT, "Salvic App");
-            share.putExtra(Intent.EXTRA_TEXT, "Salvic Test App");
-
-            startActivity(Intent.createChooser(share, "Salvic"));
+            share();
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void share() {
+        Intent share = new Intent(android.content.Intent.ACTION_SEND);
+        share.setType("text/plain");
+        share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+
+        // Add data to the intent, the receiving app will decide
+        // what to do with it.
+        share.putExtra(Intent.EXTRA_SUBJECT, "Salvic App");
+        share.putExtra(Intent.EXTRA_TEXT, "Salvic Test App");
+
+        startActivity(Intent.createChooser(share, "Salvic"));
     }
 
     public void savepatientdetails() {
@@ -123,7 +152,7 @@ public class Main2Activity extends AppCompatActivity
         user.put("sex", spinner.getSelectedItem().toString());
 
 // Add a new document with a generated ID
-        db.collection("users")
+        db.collection("users").document("total").collection("totalusers")
                 .add(user)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
@@ -141,7 +170,74 @@ public class Main2Activity extends AppCompatActivity
                 });
     }
 
+    public void clearpatientsdetails() {
+
+        db.collection("users").document("total")
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error deleting document", e);
+                    }
+                });
+    }
+
     public void retrievepatientdetails() {
 
+        db.collection("users").document("total").collection("totalusers")
+
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value,
+                                        @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w(TAG, "Listen failed.", e);
+                            return;
+                        }
+
+
+                        //  List<PatientClass> patientClasses = new ArrayList<>();
+                        for (QueryDocumentSnapshot doc : value) {
+                            PatientClass patientClass = new PatientClass();
+                            patientClass.setEmail(doc.getString("email"));
+                            patientClass.setAge(doc.getString("age"));
+                            patientClass.setSex(doc.getString("sex"));
+                            patientClass.setFullname(doc.getString("fullname"));
+
+                            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+                            recyclerView.setLayoutManager(mLayoutManager);
+                            recyclerView.setItemAnimator(new DefaultItemAnimator());
+                            mUserList.add(patientClass);
+                            patientAdapter = new PatientAdapter(getApplicationContext(), mUserList);
+                            recyclerView.setAdapter(patientAdapter);
+                            // if (doc.get("name") != null) {
+                            //  cities.add(doc.getString("name"));
+
+                            // }
+                        }
+                        Log.d(TAG, "Current cites in CA: " + mUserList);
+                    }
+                });
+
+    }
+
+    public void checkinternet() {
+        boolean connected = false;
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            //we are connected to a network
+            connected = true;
+        } else {
+
+            connected = false;
+            Toast.makeText(getApplicationContext(), getString(R.string.nonetwork), Toast.LENGTH_SHORT).show();
+        }
     }
 }
