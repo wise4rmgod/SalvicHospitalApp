@@ -1,0 +1,122 @@
+{
+  "project_info": {
+    "project_number": "432872110258",
+    "firebase_url": "https://nyscconnectme.firebaseio.com",
+    "project_id": "nyscconnectme",
+    "storage_bucket": "nyscconnectme.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:432872110258:android:3311ceb552ca9f5a",
+        "android_client_info": {
+          "package_name": "com.developer.wise4rmgod.nyscconnectme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "432872110258-ef6clecg5sttaupsip05d7t0uh7d7cev.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.developer.wise4rmgod.nyscconnectme",
+            "certificate_hash": "81f77176989f70169a9c68ee697161ff0f851783"
+          }
+        },
+        {
+          "client_id": "432872110258-apuihv27orus9t0lsko5p9isk8tn3q6p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIT5fgH_F5dVMU0T1p_5SluqPZ8X7S6G0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "432872110258-apuihv27orus9t0lsko5p9isk8tn3q6p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:432872110258:android:ccfab5805527e5cc",
+        "android_client_info": {
+          "package_name": "com.developer.wise4rmgod.salvichospitalapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "432872110258-p5l9er5mcjck9i5mqja2p7ep3n7q6o0r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.developer.wise4rmgod.salvichospitalapp",
+            "certificate_hash": "81f77176989f70169a9c68ee697161ff0f851783"
+          }
+        },
+        {
+          "client_id": "432872110258-apuihv27orus9t0lsko5p9isk8tn3q6p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIT5fgH_F5dVMU0T1p_5SluqPZ8X7S6G0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "432872110258-apuihv27orus9t0lsko5p9isk8tn3q6p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:432872110258:android:382c6f1ef6fe03a1",
+        "android_client_info": {
+          "package_name": "com.developer.wise4rmgod.upnepa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "432872110258-rtg520r6b30lp102utmsc2hsdl3iief9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.developer.wise4rmgod.upnepa",
+            "certificate_hash": "81f77176989f70169a9c68ee697161ff0f851783"
+          }
+        },
+        {
+          "client_id": "432872110258-apuihv27orus9t0lsko5p9isk8tn3q6p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIT5fgH_F5dVMU0T1p_5SluqPZ8X7S6G0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "432872110258-apuihv27orus9t0lsko5p9isk8tn3q6p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
